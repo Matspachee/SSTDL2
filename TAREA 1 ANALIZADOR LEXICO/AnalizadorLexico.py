@@ -3,38 +3,37 @@ class Lexer:
         pass
 
     def analyze_token(self, token):
-        state = 0  # Estado inicial identificado con el número 0
+        state = 0 
         for char in token:
-            if state == 0:  # Estado inicial
+            if state == 0: 
                 if char.isdigit():
-                    state = 1  # Estado para números enteros
+                    state = 1
                 elif char.isalpha() or char == "_":
-                    state = 3  # Estado para identificadores
+                    state = 3
                 elif char == ".":
-                    state = 5  # Estado de error inmediato
+                    state = 5
                 else:
-                    state = 5  # Estado de error
-            elif state == 1:  # Estado para números enteros
+                    state = 5
+            elif state == 1:
                 if char.isdigit():
                     state = 1
                 elif char == ".":
-                    state = 2  # Posible número flotante
+                    state = 2
                 else:
-                    state = 5  # Estado de error
-            elif state == 2:  # Estado para números flotantes
+                    state = 5
+            elif state == 2:
                 if char.isdigit():
                     state = 2
                 else:
-                    state = 5  # Estado de error
-            elif state == 3:  # Estado para identificadores
+                    state = 5
+            elif state == 3:
                 if char.isalnum() or char == "_":
                     state = 3
                 else:
-                    state = 5  # Estado de error
-            elif state == 5:  # Estado de error
+                    state = 5 
+            elif state == 5:
                 break
 
-        # Determina el tipo final según el estado alcanzado
         if state == 1:
             return f"{token} = INT"
         elif state == 2:
