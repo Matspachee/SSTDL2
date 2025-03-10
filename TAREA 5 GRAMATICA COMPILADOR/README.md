@@ -1,11 +1,9 @@
-Generamos cambios de la entrega anterior a esta entrega utilizando clases para los analizadores
+Para esta practica generamos que el programa pueda leer una gramatica en un archivo externo al programa
 
-Terminal
-No Terminal
-Estado
+![image](https://github.com/user-attachments/assets/a2d011b7-c291-4893-9886-1a178a7e8808)
 
-![image](https://github.com/user-attachments/assets/3fabea7c-8c70-4a90-870a-eea0b9d4e3ae)
+![image](https://github.com/user-attachments/assets/8d38582e-5c48-41d8-9a9f-0531ec6d5b61)
 
-![image](https://github.com/user-attachments/assets/e8e468df-e3ad-40c1-a870-04902a6d274d)
+![image](https://github.com/user-attachments/assets/e466b27f-ab8e-4d3d-9508-c6480d32115a)
 
-![image](https://github.com/user-attachments/assets/5013f2b8-01e2-44b8-8b5c-21774ae54d89)
+![image](https://github.com/user-attachments/assets/e56e30b0-b4bd-4f67-9131-949802908962)
