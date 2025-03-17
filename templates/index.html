@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador de Gramática</title>
+
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo Lofi Expandido */
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #dde1e7; /* Azul grisáceo claro */
+            color: #2b2d42;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            background: #4a4e69; /* Azul oscuro */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 80px;
+        }
+
+        .panel {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #4a4e69;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #2b2d42;
+            margin-top: 20px;
+            border-bottom: 2px solid #4a4e69;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #4a4e69;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #3d3d5c;
+        }
+
+        /* Mensajes Flash */
+        .flash-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 500px;
+            z-index: 1000;
+        }
+
+        .flash-message {
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        .flash-success {
+            background: #a8dadc;
+            color: #1d3557;
+            border: 1px solid #457b9d;
+        }
+
+        .flash-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .flash-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+<body>
+    <header>Analizador de Gramática</header>
+
+    <!-- Contenedor de mensajes flash -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="main-content">
+        <!-- Panel de Gramática -->
+        <div class="panel">
+            <h2>Subir Gramática - Archivo XLSX</h2>
+            <form action="/upload_grammar" method="post" enctype="multipart/form-data">
+                <input type="file" name="grammar_file" accept=".xlsx">
+                <button type="submit">Cargar</button>
+            </form>
+            <button onclick="window.open('/view_grammar', '_blank')">Ver Gramática</button>
+        </div>
+
+        <!-- Panel de Entrada -->
+        <div class="panel">
+            <h2>Subir Entrada - Archivo TXT</h2>
+            <form action="/upload_input" method="post" enctype="multipart/form-data">
+                <input type="file" name="input_file" accept=".txt">
+                <button type="submit">Cargar Entrada</button>
+            </form>
+            <button onclick="window.open('/view_output', '_blank')">Ver Análisis</button>
+        </div>
+    </div>
+</body>
+</html>
