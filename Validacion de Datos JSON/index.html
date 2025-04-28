@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validador de Esquemas JSON</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ajv@6.12.6/dist/ajv.min.js"></script>
+</head>
+
+<body>
+
+<h1>Validador de Esquemas JSON</h1>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('validator')">Validador</button>
+  <button class="tab-btn" onclick="showTab('examples')">Ejemplos</button>
+</div>
+
+<div id="validator" class="container">
+  <h2>Validación de datos con esquemas JSON</h2>
+  <p>Ingresa un esquema JSON y los datos a validar para comprobar si cumplen con la estructura definida.</p>
+  
+  <label for="schema">Esquema JSON</label>
+  <textarea id="schema" placeholder='{"type": "object", "properties": {"name": {"type": "string"}}}'></textarea>
+
+  <label for="data">Datos a validar</label>
+  <textarea id="data" placeholder='{"name": "Juan Pérez"}'></textarea>
+
+  <div class="buttons">
+    <button class="validate-btn" onclick="validateJSON()">Validar</button>
+    <button class="clear-btn" onclick="clearFields()">Limpiar</button>
+  </div>
+
+  <div id="result" class="result" style="display: none;"></div>
+</div>
+
+<div id="examples" class="container" style="display: none;">
+  <h2>Ejemplos de Uso</h2>
+  
+  <p><strong>Esquema JSON:</strong></p>
+  <pre>{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "email": { "type": "string", "format": "email" }
+  },
+  "required": ["name", "email"]
+}</pre>
+
+  <p><strong>Datos JSON:</strong></p>
+  <pre>{
+  "name": "Ana López",
+  "email": "ana@example.com"
+}</pre>
+
+  <p><strong>Esquema JSON:</strong></p>
+  <pre>{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer" },
+    "title": { "type": "string" },
+    "price": { "type": "number" },
+    "available": { "type": "boolean" }
+  },
+  "required": ["id", "title", "price"]
+}</pre>
+
+  <p><strong>Datos JSON:</strong></p>
+  <pre>{
+  "id": 101,
+  "title": "Auriculares Inalámbricos",
+  "price": 59.99,
+  "available": true
+}</pre>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
