@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 260 25% 98%;
+    --foreground: 260 10% 10%;
+    --card: 260 25% 98%;
+    --card-foreground: 260 10% 10%;
+    --popover: 260 25% 98%;
+    --popover-foreground: 260 10% 10%;
+    --primary: 260 100% 50%;
+    --primary-foreground: 260 10% 98%;
+    --secondary: 260 30% 90%;
+    --secondary-foreground: 260 10% 10%;
+    --muted: 260 20% 90%;
+    --muted-foreground: 260 10% 40%;
+    --accent: 260 30% 90%;
+    --accent-foreground: 260 10% 10%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 260 10% 98%;
+    --border: 260 20% 85%;
+    --input: 260 20% 85%;
+    --ring: 260 100% 50%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 260 25% 5%;
+    --foreground: 260 10% 98%;
+    --card: 260 25% 8%;
+    --card-foreground: 260 10% 98%;
+    --popover: 260 25% 8%;
+    --popover-foreground: 260 10% 98%;
+    --primary: 260 100% 60%;
+    --primary-foreground: 260 10% 98%;
+    --secondary: 260 30% 15%;
+    --secondary-foreground: 260 10% 98%;
+    --muted: 260 20% 15%;
+    --muted-foreground: 260 10% 70%;
+    --accent: 260 30% 15%;
+    --accent-foreground: 260 10% 98%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 260 10% 98%;
+    --border: 260 20% 20%;
+    --input: 260 20% 20%;
+    --ring: 260 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Estrellas animadas */
+.stars-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.stars,
+.stars2,
+.stars3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-image: radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 50px 160px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 90px 40px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 130px 80px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 160px 120px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0;
+  animation: stars-animation 8s infinite linear;
+}
+
+.stars2 {
+  background-image: radial-gradient(2px 2px at 100px 50px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 200px 100px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 300px 50px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 400px 100px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 500px 50px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 50px 200px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0));
+  background-size: 400px 400px;
+  animation: stars-animation 15s infinite linear;
+}
+
+.stars3 {
+  background-image: radial-gradient(2px 2px at 150px 150px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 250px 250px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 350px 350px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 450px 450px, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 550px 550px, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 650px 650px, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0));
+  background-size: 600px 600px;
+  animation: stars-animation 30s infinite linear;
+}
+
+@keyframes stars-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  10% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-2000px);
+  }
+}
+
+/* Estilos para el árbol de derivación */
+.tree-node {
+  transition: all 0.3s ease;
+}
+
+.tree-node:hover {
+  filter: brightness(1.2);
+}
+
+.tree-connection {
+  stroke-dasharray: 5;
+  animation: dash 20s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+/* Estilos para los tokens */
+.token-item {
+  transition: all 0.2s ease;
+}
+
+.token-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para las pilas */
+.stack-item {
+  transition: all 0.3s ease;
+}
+
+.stack-item:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para la tabla de símbolos */
+.symbol-row {
+  transition: background-color 0.2s ease;
+}
+
+.symbol-row:hover {
+  background-color: rgba(139, 92, 246, 0.1);
+}
+
+/* Estilos para los errores */
+.error-item {
+  transition: all 0.2s ease;
+}
+
+.error-item:hover {
+  transform: translateX(5px);
+}
+
+/* Estilos para el modo de pantalla completa */
+.fullscreen-mode {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: auto !important;
+  padding: 1rem !important;
+}

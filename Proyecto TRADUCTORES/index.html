@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analizador de Lenguajes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Analizador de Lenguajes</h1>
+      <p>Analiza código fuente según gramáticas de programación</p>
+      <div class="tabs">
+        <button id="btn-lenguaje" class="active">📚 Lenguaje</button>
+        <button id="btn-codigo">💻 Código</button>
+        <button id="btn-resultados">📊 Resultados</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Sección: Selección de Lenguaje -->
+      <section id="seccion-lenguaje" class="visible">
+        <div class="card">
+          <h2>Seleccionar Lenguaje</h2>
+          <select id="selector-lenguaje" class="form-control">
+            <option disabled selected>Seleccionar lenguaje</option>
+            <option value="c">C</option>
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="custom">Personalizado</option>
+          </select>
+
+          <div id="gramatica-container" class="hidden">
+            <h3>Gramática Personalizada</h3>
+            <textarea id="gramatica-textarea" class="form-control" 
+              placeholder="Ejemplo:&#10;E -> E + T | T&#10;T -> T * F | F&#10;F -> ( E ) | id"></textarea>
+            <div class="button-group">
+              <button id="cargar-gramatica" class="btn-primary">Cargar Gramática</button>
+              <button id="ejemplo-gramatica" class="btn-secondary">Ver Ejemplo</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Ingreso de Código -->
+      <section id="seccion-codigo">
+        <div class="card">
+          <h2>Ingresa tu Código</h2>
+          <div class="code-actions">
+            <button id="ejemplo-codigo" class="btn-secondary">Cargar Ejemplo</button>
+          </div>
+          <textarea id="codigo-input" class="form-control code-input" 
+            placeholder="Escribe o pega aquí tu código..."></textarea>
+          <button id="analizar-codigo" class="btn-primary">Analizar Código</button>
+        </div>
+      </section>
+
+      <!-- Sección: Resultados -->
+      <section id="seccion-resultados">
+        <div class="card">
+          <h2>Resultado del Análisis</h2>
+          <div id="errores" class="errors-container"></div>
+          
+          <div class="results-grid">
+            <div class="result-section">
+              <h3>Tokens Identificados</h3>
+              <div id="tokens" class="tokens-container"></div>
+            </div>
+            
+            <div class="result-section">
+              <h3>Árbol de Derivación</h3>
+              <div id="arbol-container">
+                <pre id="arbol-derivacion"></pre>
+                <div id="arbol-visual" class="tree-visualization"></div>
+              </div>
+            </div>
+            
+            <div class="result-section">
+              <h3>Pasos del Análisis</h3>
+              <pre id="pasos-analisis" class="steps-container"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
