@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Grammar } from "@/lib/parser"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -14,14 +13,13 @@ import { parseGrammarFromExcel } from "@/lib/excel-parser"
 import { LanguageSelector } from "@/components/language-selector"
 import { AnalyzerResults } from "@/components/analyzer-results"
 import { useTheme } from "next-themes"
-import { Lexer } from "@/lib/lexer"
-import { TreeGenerator } from "@/lib/tree-generator"
-import { SemanticAnalyzer } from "@/lib/semantic-analyzer"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AnalyzerEngine } from "@/lib/analyzer-engine"
+import type { AnalysisResult } from "@/lib/types"
 
 export default function Home() {
-  const [grammar, setGrammar] = useState<Grammar | null>(null)
-  const [analysisResult, setAnalysisResult] = useState<any>(null)
+  const [analyzerEngine] = useState(() => new AnalyzerEngine())
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [activeTab, setActiveTab] = useState("setup")
   const [error, setError] = useState<string | null>(null)
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null)
@@ -32,12 +30,10 @@ export default function Home() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
-  // Evitar hidratación incorrecta
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Actualizar los datos del lenguaje cuando cambia la selección
   useEffect(() => {
     if (selectedLanguage) {
       const language = getLanguageById(selectedLanguage)
@@ -46,8 +42,7 @@ export default function Home() {
       if (language) {
         try {
           setError(null)
-          const newGrammar = new Grammar().loadFromString(language.grammar)
-          setGrammar(newGrammar)
+          analyzerEngine.setLanguage(language)
           setSourceCode(language.example)
           setUploadedGrammarName(null)
         } catch (err: any) {
@@ -56,14 +51,14 @@ export default function Home() {
       }
     } else {
       setLanguageData(null)
-      setGrammar(null)
       setSourceCode("")
     }
-  }, [selectedLanguage])
+  }, [selectedLanguage, analyzerEngine])
 
   const handleSelectLanguage = (languageId: string) => {
     setSelectedLanguage(languageId)
     setAnalysisResult(null)
+    setError(null)
   }
 
   const handleFileUpload = async (file: File) => {
@@ -72,8 +67,7 @@ export default function Home() {
 
     try {
       const grammarText = await parseGrammarFromExcel(file)
-      const newGrammar = new Grammar().loadFromString(grammarText)
-      setGrammar(newGrammar)
+      analyzerEngine.setGrammar(grammarText)
       setSelectedLanguage(null)
       setLanguageData(null)
       setUploadedGrammarName(file.name)
@@ -85,8 +79,8 @@ export default function Home() {
     }
   }
 
-  const handleAnalyzeCode = () => {
-    if (!grammar) {
+  const handleAnalyzeCode = async () => {
+    if (!analyzerEngine.isReady()) {
       setError("Primero debes seleccionar un lenguaje o cargar una gramática")
       return
     }
@@ -100,37 +94,11 @@ export default function Home() {
       setIsLoading(true)
       setError(null)
 
-      // Crear un analizador léxico
-      const lexer = new Lexer(
-        sourceCode,
-        languageData ? languageData.keywords : [],
-        languageData ? languageData.datatypes : [],
-      )
-      const tokens = lexer.tokenize()
-
-      // Generar un árbol de derivación y pilas
-      const treeGenerator = new TreeGenerator(grammar, tokens)
-      const { tree, inputStack, outputStack, stackHistory } = treeGenerator.generate()
-
-      // Realizar análisis semántico
-      const semanticAnalyzer = new SemanticAnalyzer(tokens, languageData)
-      const { symbols, errors: semanticErrors } = semanticAnalyzer.analyze()
-
-      // Establecer el resultado del análisis
-      setAnalysisResult({
-        tokens,
-        tree,
-        inputStack,
-        outputStack,
-        stackHistory,
-        steps: [`Análisis léxico completado. Se encontraron ${tokens.length} tokens.`],
-        symbols,
-        semanticErrors,
-      })
-
+      const result = analyzerEngine.analyze(sourceCode)
+      setAnalysisResult(result)
       setActiveTab("results")
     } catch (err: any) {
-      setError(`Error durante el análisis: ${err.message}`)
+      setError(err.message)
     } finally {
       setIsLoading(false)
     }
@@ -141,10 +109,9 @@ export default function Home() {
 
     const exportData = {
       sourceCode,
-      tokens: analysisResult.tokens,
-      symbols: analysisResult.symbols,
-      semanticErrors: analysisResult.semanticErrors,
+      analysis: analysisResult,
       language: languageData?.name || uploadedGrammarName || "Custom Grammar",
+      timestamp: new Date().toISOString(),
     }
 
     const dataStr = JSON.stringify(exportData, null, 2)
@@ -158,7 +125,7 @@ export default function Home() {
   }
 
   if (!mounted) {
-    return null // Evitar renderizado durante la hidratación
+    return null
   }
 
   return (
@@ -283,7 +250,8 @@ export default function Home() {
                       onChange={setSourceCode}
                       onAnalyze={handleAnalyzeCode}
                       language={languageData}
-                      grammarLoaded={!!grammar}
+                      grammarLoaded={analyzerEngine.isReady()}
+                      isLoading={isLoading}
                     />
                   </CardContent>
                 </Card>
@@ -298,17 +266,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <AnalyzerResults
-                  sourceCode={sourceCode}
-                  tokens={analysisResult.tokens || []}
-                  symbols={analysisResult.symbols || []}
-                  semanticErrors={analysisResult.semanticErrors || []}
-                  tree={analysisResult.tree}
-                  inputStack={analysisResult.inputStack || []}
-                  outputStack={analysisResult.outputStack || []}
-                  stackHistory={analysisResult.stackHistory || []}
-                  steps={analysisResult.steps || []}
-                />
+                <AnalyzerResults sourceCode={sourceCode} analysisResult={analysisResult} />
               </motion.div>
             ) : (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
